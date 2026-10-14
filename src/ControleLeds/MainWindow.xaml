@@ -1,0 +1,174 @@
+<Window x:Class="ControleLeds.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Controle de LEDs" Width="1080" Height="720" MinWidth="860" MinHeight="600"
+        Background="{StaticResource Fundo}" WindowStartupLocation="CenterScreen" Icon="icone.ico"
+        Loaded="Window_Loaded">
+    <Grid Margin="20">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="300"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Vista lateral do gabinete, como na foto do Ângelo: traseira à esquerda, frente (radiador) à direita -->
+        <Border Grid.Column="0" Background="{StaticResource Painel}" CornerRadius="10" Padding="16" Margin="0,0,20,0">
+            <Border.Resources>
+                <LinearGradientBrush x:Key="ArcoFabrica" StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="#FF3B3B" Offset="0"/>
+                    <GradientStop Color="#FFD43B" Offset="0.2"/>
+                    <GradientStop Color="#3BFF6E" Offset="0.4"/>
+                    <GradientStop Color="#3BD8FF" Offset="0.6"/>
+                    <GradientStop Color="#5B5BFF" Offset="0.8"/>
+                    <GradientStop Color="#FF3BD8" Offset="1"/>
+                </LinearGradientBrush>
+                <Style x:Key="VentoinhaFixa" TargetType="Ellipse">
+                    <Setter Property="Fill" Value="#17191F"/>
+                    <Setter Property="Stroke" Value="{StaticResource ArcoFabrica}"/>
+                    <Setter Property="StrokeThickness" Value="4"/>
+                    <Setter Property="StrokeDashArray" Value="2,1.2"/>
+                    <Setter Property="Opacity" Value="0.55"/>
+                </Style>
+                <Style x:Key="AnelLed" TargetType="Ellipse">
+                    <Setter Property="Fill" Value="#121419"/>
+                    <Setter Property="Stroke" Value="{StaticResource LedApagadoAnel}"/>
+                    <Setter Property="StrokeThickness" Value="7"/>
+                    <Setter Property="Cursor" Value="Hand"/>
+                    <Setter Property="Tag" Value="anel"/>
+                    <EventSetter Event="MouseLeftButtonUp" Handler="LedWaterCooler_Click"/>
+                </Style>
+            </Border.Resources>
+            <Viewbox Stretch="Uniform">
+                <Canvas Width="440" Height="390">
+                    <Canvas Canvas.Left="20" Canvas.Top="0">
+                        <!-- Gabinete -->
+                        <Rectangle Canvas.Left="20" Canvas.Top="20" Width="360" Height="320" RadiusX="8" RadiusY="8"
+                                   Stroke="#5A6070" StrokeThickness="1"/>
+
+                        <!-- Placa-mãe e memória (sem LED) -->
+                        <Rectangle Canvas.Left="62" Canvas.Top="34" Width="210" Height="180" RadiusX="3" RadiusY="3"
+                                   Fill="#1B1E25" Stroke="#343843" StrokeThickness="0.6"/>
+                        <TextBlock Canvas.Left="70" Canvas.Top="190" FontSize="6" Foreground="#5A6070"
+                                   Text="PRIME B550M-A" IsHitTestVisible="False"/>
+                        <Rectangle Canvas.Left="232" Canvas.Top="62" Width="7" Height="105" RadiusX="1" RadiusY="1"
+                                   Fill="#2A2D35" Stroke="#3E4350" StrokeThickness="0.5" ToolTip="Memória RAM"/>
+                        <Rectangle Canvas.Left="243" Canvas.Top="62" Width="7" Height="105" RadiusX="1" RadiusY="1"
+                                   Fill="#2A2D35" Stroke="#3E4350" StrokeThickness="0.5" ToolTip="Memória RAM"/>
+
+                        <!-- Placa de vídeo (sem LED) -->
+                        <Rectangle Canvas.Left="62" Canvas.Top="206" Width="196" Height="44" RadiusX="4" RadiusY="4"
+                                   Fill="#22252C" Stroke="#4A505E" StrokeThickness="0.6"/>
+                        <TextBlock Canvas.Left="62" Canvas.Top="221" Width="196" TextAlignment="Center" FontSize="9"
+                                   FontWeight="SemiBold" Foreground="#7D8494" Text="GEFORCE RTX 2060" IsHitTestVisible="False"/>
+
+                        <!-- Ventoinhas do gabinete: arco-íris de fábrica, sem controle por software -->
+                        <Ellipse Style="{StaticResource VentoinhaFixa}" Canvas.Left="26" Canvas.Top="44" Width="34" Height="108"
+                                 ToolTip="V2 · traseira — sem controle por software (efeito de fábrica, o LED parece vir da energia da ventoinha)"/>
+                        <Rectangle Canvas.Left="150" Canvas.Top="24" Width="170" Height="7" RadiusX="3.5" RadiusY="3.5"
+                                   Fill="{StaticResource ArcoFabrica}" Opacity="0.45" Stroke="#6B7180" StrokeThickness="0.5"
+                                   StrokeDashArray="2,1.2"
+                                   ToolTip="V1 · topo — sem controle por software (efeito de fábrica, o LED parece vir da energia da ventoinha)"/>
+                        <Ellipse Style="{StaticResource VentoinhaFixa}" Canvas.Left="198" Canvas.Top="274" Width="100" Height="50"
+                                 ToolTip="V3 · fundo — sem controle por software (efeito de fábrica, o LED parece vir da energia da ventoinha)"/>
+
+                        <!-- Radiador frontal -->
+                        <Rectangle Canvas.Left="346" Canvas.Top="60" Width="12" Height="240" RadiusX="2" RadiusY="2"
+                                   Fill="#173452" Stroke="#378ADD" StrokeThickness="0.5" ToolTip="Radiador do water cooler"/>
+
+                        <!-- Water cooler: os 3 recebem o mesmo sinal ARGB -->
+                        <Ellipse x:Name="LedR1" Style="{StaticResource AnelLed}" Canvas.Left="296" Canvas.Top="92" Width="48" Height="84"
+                                 ToolTip="R1 · ventoinha superior do radiador (ARGB) — clique para ligar/desligar"/>
+                        <Ellipse x:Name="LedR2" Style="{StaticResource AnelLed}" Canvas.Left="296" Canvas.Top="180" Width="48" Height="84"
+                                 ToolTip="R2 · ventoinha inferior do radiador (ARGB) — clique para ligar/desligar"/>
+                        <Ellipse Canvas.Left="313" Canvas.Top="125" Width="14" Height="18" Fill="#2A2D35" IsHitTestVisible="False"/>
+                        <Ellipse Canvas.Left="313" Canvas.Top="213" Width="14" Height="18" Fill="#2A2D35" IsHitTestVisible="False"/>
+                        <Ellipse x:Name="LedBomba" Style="{StaticResource AnelLed}" Canvas.Left="137" Canvas.Top="96" Width="56" Height="56"
+                                 ToolTip="Bomba do water cooler, sobre a CPU (ARGB) — clique para ligar/desligar"/>
+                        <TextBlock x:Name="TextoBomba" Canvas.Left="137" Canvas.Top="118" Width="56" TextAlignment="Center"
+                                   FontSize="8" Text="Bomba" IsHitTestVisible="False"/>
+
+                        <!-- Rótulos -->
+                        <TextBlock Style="{StaticResource Rotulo}" Canvas.Left="362" Canvas.Top="128" Text="R1"/>
+                        <TextBlock Style="{StaticResource Rotulo}" Canvas.Left="362" Canvas.Top="216" Text="R2"/>
+                        <TextBlock Style="{StaticResource Rotulo}" Canvas.Left="324" Canvas.Top="21" Text="V1 topo"/>
+                        <TextBlock Style="{StaticResource Rotulo}" Canvas.Left="30" Canvas.Top="156" Text="V2"/>
+                        <TextBlock Style="{StaticResource Rotulo}" Canvas.Left="302" Canvas.Top="292" Text="V3 fundo"/>
+                        <TextBlock Style="{StaticResource Rotulo}" Canvas.Left="20" Canvas.Top="344" Text="Traseira"/>
+                        <TextBlock Style="{StaticResource Rotulo}" Canvas.Left="320" Canvas.Top="344" Width="60"
+                                   TextAlignment="Right" Text="Frente"/>
+
+                        <!-- Legenda -->
+                        <Ellipse Canvas.Left="20" Canvas.Top="366" Width="11" Height="11" Stroke="#378ADD" StrokeThickness="2.5"/>
+                        <TextBlock Style="{StaticResource Rotulo}" Canvas.Left="36" Canvas.Top="365"
+                                   Text="controlável (mesmo sinal) · clique para ligar/desligar"/>
+                        <Ellipse Style="{StaticResource VentoinhaFixa}" Canvas.Left="262" Canvas.Top="366" Width="11" Height="11"
+                                 StrokeThickness="2.5"/>
+                        <TextBlock Style="{StaticResource Rotulo}" Canvas.Left="278" Canvas.Top="365" Text="sem controle (fábrica)"/>
+                    </Canvas>
+                </Canvas>
+            </Viewbox>
+        </Border>
+
+        <!-- Controles -->
+        <DockPanel Grid.Column="1" LastChildFill="True">
+            <TextBlock DockPanel.Dock="Bottom" x:Name="TextoConexao" Foreground="{StaticResource TextoFraco}"
+                       FontSize="11" TextWrapping="Wrap" Margin="0,12,0,0"/>
+
+            <StackPanel>
+                <TextBlock Text="Water cooler" FontSize="22" FontWeight="SemiBold"/>
+                <TextBlock Text="Bomba, R1 e R2 · mesmo sinal ARGB" Foreground="{StaticResource TextoFraco}" FontSize="12"
+                           Margin="0,2,0,14"/>
+
+                <Border Background="{StaticResource Painel}" CornerRadius="8" Padding="12,10">
+                    <StackPanel Orientation="Horizontal">
+                        <Ellipse x:Name="IndicadorEstado" Width="12" Height="12" Fill="{StaticResource LedApagado}"
+                                 VerticalAlignment="Center"/>
+                        <TextBlock x:Name="TextoEstado" Text="…" FontSize="15" Margin="10,0,0,0"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+
+                <UniformGrid Columns="2" Margin="0,12,0,0">
+                    <Button x:Name="BotaoLigar" Style="{StaticResource BotaoPrincipal}" Content="Ligar" Margin="0,0,6,0"
+                            Click="Ligar_Click"/>
+                    <Button x:Name="BotaoDesligar" Style="{StaticResource Botao}" Content="Desligar" Margin="6,0,0,0"
+                            Click="Desligar_Click"/>
+                </UniformGrid>
+
+                <TextBlock Style="{StaticResource Secao}" Text="COR"/>
+                <WrapPanel x:Name="PainelCores"/>
+                <DockPanel Margin="0,4,0,0">
+                    <Button DockPanel.Dock="Right" Style="{StaticResource Botao}" Content="Aplicar" Padding="10,4"
+                            Click="AplicarHex_Click" x:Name="BotaoHex"/>
+                    <TextBox x:Name="CampoHex" MaxLength="7" Margin="0,0,8,0" Padding="6,4" FontFamily="Consolas"
+                             FontSize="14" Background="#262A33" Foreground="{StaticResource Texto}"
+                             BorderBrush="{StaticResource Borda}" CaretBrush="{StaticResource Texto}"
+                             VerticalContentAlignment="Center" KeyDown="CampoHex_KeyDown"/>
+                </DockPanel>
+
+                <TextBlock Style="{StaticResource Secao}" Text="MODO"/>
+                <UniformGrid x:Name="PainelModos" Columns="2"/>
+                <Button x:Name="BotaoMaisModos" Style="{StaticResource Botao}" Padding="8,6" Margin="0,0,6,6" FontSize="13"
+                        Click="MaisModos_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock x:Name="TextoMaisModos" Text="Mais modos" VerticalAlignment="Center"/>
+                        <Path x:Name="SetaMaisModos" Data="M0,0 L5,5 L10,0" Stroke="{StaticResource Texto}"
+                              StrokeThickness="1.6" StrokeStartLineCap="Round" StrokeEndLineCap="Round"
+                              StrokeLineJoin="Round" Width="10" Height="5" Margin="8,1,0,0" VerticalAlignment="Center"
+                              RenderTransformOrigin="0.5,0.5">
+                            <Path.RenderTransform>
+                                <RotateTransform x:Name="GiroSetaMaisModos" Angle="0"/>
+                            </Path.RenderTransform>
+                        </Path>
+                    </StackPanel>
+                </Button>
+                <UniformGrid x:Name="PainelMaisModos" Columns="2" Visibility="Collapsed"/>
+                <TextBlock x:Name="TextoModo" Foreground="{StaticResource TextoFraco}" FontSize="12" TextWrapping="Wrap"
+                           Margin="0,4,0,0"/>
+
+                <TextBlock Style="{StaticResource Secao}" Text="VENTOINHAS DO GABINETE (V1, V2, V3)"/>
+                <TextBlock Foreground="{StaticResource TextoFraco}" FontSize="12" TextWrapping="Wrap"
+                           Text="Sem controle por software: não respondem à placa, e o LED parece vir da energia da própria ventoinha."/>
+            </StackPanel>
+        </DockPanel>
+    </Grid>
+</Window>

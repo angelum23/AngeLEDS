@@ -1,0 +1,6 @@
+bin/
+obj/
+publicado/
+.vs/
+.idea/
+*.user
