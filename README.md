@@ -180,3 +180,7 @@ Isso exigiria uma v2 do app, com um controle por canal.
 | Clique aceito, mas nada muda | Veja o log mais recente em `%APPDATA%\OpenRGB\logs` e confirme que a placa aparece no OpenRGB. No Windows 11, desligue a Iluminação dinâmica |
 | Só parte das ventoinhas acende no Direto | Zona ARGB com 6 LEDs: refaça o [passo 3](#3-ajustar-o-tamanho-da-zona-argb-uma-vez-só) |
 | A linha de comando do OpenRGB não mostra nada no terminal | Normal no Windows. A saída vai só para o log |
+
+## Licença
+
+[MIT](LICENSE). O OpenRGB, que o app usa por baixo, tem licença própria (GPL-2.0) e não vem junto.
