@@ -83,7 +83,7 @@ A placa não aceita velocidade nem brilho em nenhum modo, por isso o app não te
 
 **Limitações conhecidas:**
 - **Direto** fica igual ao Estático, porque usa uma cor só para todos os LEDs.
-- **Perseguição** e **Perseguição suave** têm uma pausa longa entre as passadas. Provavelmente o efeito da placa percorre mais LEDs do que existem.
+- **Perseguição** e **Perseguição suave** têm uma pausa longa entre as passadas. O efeito roda no firmware da placa, que percorre o comprimento máximo do conector ARGB e não só os 20 LEDs reais. O ajuste de tamanho da zona (passo 3) fica só dentro do OpenRGB e não chega ao hardware, então não há como corrigir isso pelo OpenRGB. A saída seria o próprio app animar o efeito pelo modo Direto, o que fica para uma versão futura.
 - O app mostra o **último comando que ele mesmo enviou**, guardado em `%LOCALAPPDATA%\ControleLeds\estado.json`. Ele não lê o estado real dos LEDs, porque a linha de comando do OpenRGB não devolve nada. Depois de formatar, o app começa como "Estado desconhecido" até o primeiro clique.
 
 ## Script de linha de comando
